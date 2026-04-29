@@ -2,7 +2,7 @@ const insumosDecimales = [
     "Agua", "Harina", "Levadura", "Sal", "Azúcar", "Oregano", "Pimienta", "Comino", 
     "Papel", "Pastor", "Tasajo", "Salchicha italiana", "Salchicha de costco", "Pepperoni", 
     "Jamón", "Tocino", "Elote", "Chile poblano", "Pimiento", "Cebolla", "Salsa", 
-    "Queso para pizza", "Queso en tira", "Piña", "Champiñon", "Jalapeño" "Aderezo mar y campo"
+    "Queso para pizza", "Queso en tira", "Piña", "Champiñon", "Jalapeño", "Aderezo mar y campo"
 ];
 
 const insumosEnteros = [
