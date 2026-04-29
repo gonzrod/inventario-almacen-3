@@ -1,4 +1,3 @@
-// Listado de insumos según requerimiento
 const insumosDecimales = [
     "Agua", "Harina", "Levadura", "Sal", "Azúcar", "Oregano", "Pimienta", "Comino", 
     "Papel", "Pastor", "Tasajo", "Salchicha italiana", "Salchicha de costco", "Pepperoni", 
@@ -15,9 +14,6 @@ const totales = {};
 const container = document.getElementById('lista-insumos');
 
 function crearInterfaz() {
-    // Limpiamos el contenedor por si acaso
-    container.innerHTML = "";
-
     const todos = [
         ...insumosDecimales.map(i => ({nombre: i, decimal: true})), 
         ...insumosEnteros.map(i => ({nombre: i, decimal: false}))
@@ -38,7 +34,7 @@ function crearInterfaz() {
             <input type="number" 
                    placeholder="Cantidad." 
                    id="input-${idLimpio}" 
-                   step="any"> 
+                   step="any">
             <div class="error-msg" id="error-${idLimpio}">solo se permite un número entero</div>
             <button class="btn-add" id="btn-${idLimpio}">+ Añadir a la lista</button>
         `;
@@ -64,8 +60,6 @@ function agregarCantidad(nombre, permiteDecimal) {
     const idBase = nombre.replace(/ /g, '-');
     const input = document.getElementById(`input-${idBase}`);
     const error = document.getElementById(`error-${idBase}`);
-    
-    // Usamos el valor tal cual viene del input
     const valorStr = input.value;
     const valorNum = parseFloat(valorStr);
 
@@ -73,18 +67,15 @@ function agregarCantidad(nombre, permiteDecimal) {
 
     if (isNaN(valorNum) || valorStr === "") return;
 
-    // Si NO permite decimal y el usuario escribió un punto
     if (!permiteDecimal && valorStr.includes('.')) {
         error.style.display = 'block';
         input.value = "";
         return;
     }
 
-    // Sumar el valor
     totales[nombre] += valorNum;
     
-    // Lógica de truncado a 3 decimales para evitar el redondeo de JS
-    // Usamos un pequeño margen de error (0.000001) para compensar la precisión binaria
+    // Lógica de truncado a 3 decimales (SIN REDONDEO)
     const resultadoSinRedondeo = Math.trunc((totales[nombre] + 0.0000001) * 1000) / 1000;
     
     document.getElementById(`total-${idBase}`).innerText = `Total: ${resultadoSinRedondeo}`;
@@ -92,5 +83,49 @@ function agregarCantidad(nombre, permiteDecimal) {
     input.value = "";
     input.focus();
 }
+
+// Lógica para el PDF
+document.getElementById('btn-guardar-pdf').addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    doc.setFontSize(18);
+    doc.setTextColor(52, 152, 219); 
+    doc.text("Reporte de Inventario de Insumos", 20, 20);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generado el: ${new Date().toLocaleString()}`, 20, 28);
+    
+    doc.setDrawColor(52, 152, 219);
+    doc.line(20, 32, 190, 32);
+
+    let y = 45;
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0);
+    doc.text("Insumo", 25, y);
+    doc.text("Cantidad Total", 150, y);
+    
+    y += 10;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+
+    for (const [insumo, total] of Object.entries(totales)) {
+        if (total > 0) {
+            const totalTruncado = Math.trunc((total + 0.0000001) * 1000) / 1000;
+            doc.text(insumo, 25, y);
+            doc.text(totalTruncado.toString(), 150, y);
+            y += 8;
+            
+            if (y > 275) {
+                doc.addPage();
+                y = 20;
+            }
+        }
+    }
+
+    doc.save(`Inventario_Pizzeria_${new Date().getTime()}.pdf`);
+});
 
 crearInterfaz();
