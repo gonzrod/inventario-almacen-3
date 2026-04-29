@@ -15,6 +15,9 @@ const totales = {};
 const container = document.getElementById('lista-insumos');
 
 function crearInterfaz() {
+    // Limpiamos el contenedor por si acaso
+    container.innerHTML = "";
+
     const todos = [
         ...insumosDecimales.map(i => ({nombre: i, decimal: true})), 
         ...insumosEnteros.map(i => ({nombre: i, decimal: false}))
@@ -35,7 +38,7 @@ function crearInterfaz() {
             <input type="number" 
                    placeholder="Cantidad." 
                    id="input-${idLimpio}" 
-                   step="0.001">
+                   step="any"> 
             <div class="error-msg" id="error-${idLimpio}">solo se permite un número entero</div>
             <button class="btn-add" id="btn-${idLimpio}">+ Añadir a la lista</button>
         `;
@@ -61,6 +64,8 @@ function agregarCantidad(nombre, permiteDecimal) {
     const idBase = nombre.replace(/ /g, '-');
     const input = document.getElementById(`input-${idBase}`);
     const error = document.getElementById(`error-${idBase}`);
+    
+    // Usamos el valor tal cual viene del input
     const valorStr = input.value;
     const valorNum = parseFloat(valorStr);
 
@@ -68,20 +73,19 @@ function agregarCantidad(nombre, permiteDecimal) {
 
     if (isNaN(valorNum) || valorStr === "") return;
 
+    // Si NO permite decimal y el usuario escribió un punto
     if (!permiteDecimal && valorStr.includes('.')) {
         error.style.display = 'block';
         input.value = "";
         return;
     }
 
-    // Sumar el valor al acumulado
+    // Sumar el valor
     totales[nombre] += valorNum;
     
-    /**
-     * LÓGICA DE TRUNCADO A 3 DECIMALES (SIN REDONDEO)
-     * Multiplicamos por 1000 para desplazar el punto, truncamos y regresamos.
-     */
-    const resultadoSinRedondeo = Math.trunc(totales[nombre] * 1000) / 1000;
+    // Lógica de truncado a 3 decimales para evitar el redondeo de JS
+    // Usamos un pequeño margen de error (0.000001) para compensar la precisión binaria
+    const resultadoSinRedondeo = Math.trunc((totales[nombre] + 0.0000001) * 1000) / 1000;
     
     document.getElementById(`total-${idBase}`).innerText = `Total: ${resultadoSinRedondeo}`;
     
