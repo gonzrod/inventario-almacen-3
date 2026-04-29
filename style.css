@@ -1,5 +1,6 @@
 :root {
     --primary-blue: #3498db;
+    --primary-green: #27ae60;
     --text-dark: #2c3e50;
     --bg-light: #f4f7f6;
     --border-color: #dcdde1;
@@ -95,8 +96,22 @@ input:focus {
     transition: background 0.3s;
 }
 
-.btn-add:hover {
-    background-color: #2980b9;
+.btn-save {
+    width: 100%;
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.2s;
+}
+
+.btn-save:active {
+    transform: scale(0.98);
 }
 
 .error-msg {
