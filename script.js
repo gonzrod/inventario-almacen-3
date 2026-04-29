@@ -14,7 +14,6 @@ const insumosEnteros = [
 const totales = {};
 const container = document.getElementById('lista-insumos');
 
-// Función para inicializar la aplicación
 function crearInterfaz() {
     const todos = [
         ...insumosDecimales.map(i => ({nombre: i, decimal: true})), 
@@ -36,7 +35,7 @@ function crearInterfaz() {
             <input type="number" 
                    placeholder="Cantidad." 
                    id="input-${idLimpio}" 
-                   step="${insumo.decimal ? '0.001' : '1'}">
+                   step="0.001">
             <div class="error-msg" id="error-${idLimpio}">Solo se permite un número entero</div>
             <button class="btn-add" id="btn-${idLimpio}">+ Añadir a la lista</button>
         `;
@@ -69,23 +68,24 @@ function agregarCantidad(nombre, permiteDecimal) {
 
     if (isNaN(valorNum) || valorStr === "") return;
 
-    // Validación de números enteros
     if (!permiteDecimal && valorStr.includes('.')) {
         error.style.display = 'block';
         input.value = "";
         return;
     }
 
-    // Sumar al acumulado
+    // Sumar el valor
     totales[nombre] += valorNum;
     
-    /** * ACTUALIZACIÓN:
-     * Se usa toFixed(3) para asegurar que se muestren/calculen 3 decimales.
-     * Number(...) elimina ceros a la derecha innecesarios (ej: 1.500 -> 1.5)
-     * pero mantiene la precisión hasta el tercer dígito.
+    /**
+     * LÓGICA SIN REDONDEO:
+     * Multiplicamos por 1000 para trabajar con los 3 decimales,
+     * usamos Math.trunc para eliminar cualquier residuo decimal de la suma de JS,
+     * y dividimos entre 1000 para volver a la posición original.
      */
-    const totalFormateado = Number(totales[nombre].toFixed(3));
-    document.getElementById(`total-${idBase}`).innerText = `Total: ${totalFormateado}`;
+    const resultadoSinRedondeo = Math.trunc(totales[nombre] * 1000) / 1000;
+    
+    document.getElementById(`total-${idBase}`).innerText = `Total: ${resultadoSinRedondeo}`;
     
     input.value = "";
     input.focus();
