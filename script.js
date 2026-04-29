@@ -1,13 +1,13 @@
 // Listado de insumos según requerimiento
 const insumosDecimales = [
     "Agua", "Harina", "Levadura", "Sal", "Azúcar", "Oregano", "Pimienta", "Comino", 
-    "Pastor", "Tasajo", "Salchicha italiana", "Salchicha de costco", "Pepperoni", 
+    "Papel", "Pastor", "Tasajo", "Salchicha italiana", "Salchicha de costco", "Pepperoni", 
     "Jamón", "Tocino", "Elote", "Chile poblano", "Pimiento", "Cebolla", "Salsa", 
     "Queso para pizza", "Queso en tira", "Piña", "Champiñon", "Jalapeño"
 ];
 
 const insumosEnteros = [
-    "Caja para pizza", "Caja mini", "Bolsas de papel", "Papel", "Pasta de tomate", 
+    "Caja para pizza", "Caja mini", "Bolsas de papel", "Pasta de tomate", 
     "Bola de pizza", "Bola mini", "Bola de pan", "Mantequilla", "Margarina"
 ];
 
@@ -36,7 +36,7 @@ function crearInterfaz() {
                    placeholder="Cantidad." 
                    id="input-${idLimpio}" 
                    step="0.001">
-            <div class="error-msg" id="error-${idLimpio}">Solo se permite un número entero</div>
+            <div class="error-msg" id="error-${idLimpio}">solo se permite un número entero</div>
             <button class="btn-add" id="btn-${idLimpio}">+ Añadir a la lista</button>
         `;
         container.appendChild(card);
@@ -74,14 +74,12 @@ function agregarCantidad(nombre, permiteDecimal) {
         return;
     }
 
-    // Sumar el valor
+    // Sumar el valor al acumulado
     totales[nombre] += valorNum;
     
     /**
-     * LÓGICA SIN REDONDEO:
-     * Multiplicamos por 1000 para trabajar con los 3 decimales,
-     * usamos Math.trunc para eliminar cualquier residuo decimal de la suma de JS,
-     * y dividimos entre 1000 para volver a la posición original.
+     * LÓGICA DE TRUNCADO A 3 DECIMALES (SIN REDONDEO)
+     * Multiplicamos por 1000 para desplazar el punto, truncamos y regresamos.
      */
     const resultadoSinRedondeo = Math.trunc(totales[nombre] * 1000) / 1000;
     
