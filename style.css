@@ -1,0 +1,108 @@
+:root {
+    --primary-blue: #3498db;
+    --text-dark: #2c3e50;
+    --bg-light: #f4f7f6;
+    --border-color: #dcdde1;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+}
+
+.insumo-card {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+    margin-bottom: 10px;
+}
+
+.insumo-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.blue-bar {
+    width: 6px;
+    height: 24px;
+    background-color: var(--primary-blue);
+    margin-right: 12px;
+    border-radius: 2px;
+}
+
+.insumo-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    flex-grow: 1;
+}
+
+.total-badge {
+    background: #e1f5fe;
+    color: var(--primary-blue);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border 0.3s;
+}
+
+input:focus {
+    border-color: var(--primary-blue);
+}
+
+.btn-add {
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.btn-add:hover {
+    background-color: #2980b9;
+}
+
+.error-msg {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: none;
+    font-weight: bold;
+}
