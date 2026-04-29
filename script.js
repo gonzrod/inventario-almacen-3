@@ -16,7 +16,6 @@ const container = document.getElementById('lista-insumos');
 
 // Función para inicializar la aplicación
 function crearInterfaz() {
-    // Unificar listas marcando cuáles permiten decimales
     const todos = [
         ...insumosDecimales.map(i => ({nombre: i, decimal: true})), 
         ...insumosEnteros.map(i => ({nombre: i, decimal: false}))
@@ -37,17 +36,15 @@ function crearInterfaz() {
             <input type="number" 
                    placeholder="Cantidad." 
                    id="input-${idLimpio}" 
-                   step="${insumo.decimal ? 'any' : '1'}">
+                   step="${insumo.decimal ? '0.001' : '1'}">
             <div class="error-msg" id="error-${idLimpio}">Solo se permite un número entero</div>
             <button class="btn-add" id="btn-${idLimpio}">+ Añadir a la lista</button>
         `;
         container.appendChild(card);
 
-        // Configurar eventos
         const input = document.getElementById(`input-${idLimpio}`);
         const btn = document.getElementById(`btn-${idLimpio}`);
 
-        // Evento al presionar Enter
         input.addEventListener('keypress', (e) => {
             if (e.key === "Enter") {
                 e.preventDefault();
@@ -55,7 +52,6 @@ function crearInterfaz() {
             }
         });
 
-        // Evento al hacer clic en el botón
         btn.addEventListener('click', () => {
             agregarCantidad(insumo.nombre, insumo.decimal);
         });
@@ -69,7 +65,6 @@ function agregarCantidad(nombre, permiteDecimal) {
     const valorStr = input.value;
     const valorNum = parseFloat(valorStr);
 
-    // Ocultar error previo
     error.style.display = 'none';
 
     if (isNaN(valorNum) || valorStr === "") return;
@@ -81,16 +76,19 @@ function agregarCantidad(nombre, permiteDecimal) {
         return;
     }
 
-    // Actualizar lógica de suma
+    // Sumar al acumulado
     totales[nombre] += valorNum;
     
-    // Actualizar visualmente (redondeo a 2 decimales para evitar errores de coma flotante)
-    document.getElementById(`total-${idBase}`).innerText = `Total: ${Number(totales[nombre].toFixed(2))}`;
+    /** * ACTUALIZACIÓN:
+     * Se usa toFixed(3) para asegurar que se muestren/calculen 3 decimales.
+     * Number(...) elimina ceros a la derecha innecesarios (ej: 1.500 -> 1.5)
+     * pero mantiene la precisión hasta el tercer dígito.
+     */
+    const totalFormateado = Number(totales[nombre].toFixed(3));
+    document.getElementById(`total-${idBase}`).innerText = `Total: ${totalFormateado}`;
     
-    // Limpiar campo y mantener el foco para seguir escribiendo
     input.value = "";
     input.focus();
 }
 
-// Iniciar la app
 crearInterfaz();
